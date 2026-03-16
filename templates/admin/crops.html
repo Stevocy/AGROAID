@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+{% block title %}Manage Crops – AgroAid Admin{% endblock %}
+{% block content %}
+<div class="admin-layout">
+  <aside class="admin-sidebar">
+    <p class="admin-sidebar-title">Knowledge Base</p>
+    <ul class="admin-nav">
+      <li><a href="{{ url_for('admin_dashboard') }}"><i class="fa-solid fa-gauge"></i> Dashboard</a></li>
+      <li><a href="{{ url_for('admin_crops') }}" class="active"><i class="fa-solid fa-seedling"></i> Crops</a></li>
+      <li><a href="{{ url_for('admin_symptoms') }}"><i class="fa-solid fa-list-check"></i> Symptoms</a></li>
+      <li><a href="{{ url_for('admin_diseases') }}"><i class="fa-solid fa-viruses"></i> Diseases</a></li>
+      <li><a href="{{ url_for('admin_treatments') }}"><i class="fa-solid fa-kit-medical"></i> Treatments</a></li>
+      <li><a href="{{ url_for('admin_rules') }}"><i class="fa-solid fa-code-branch"></i> Rules</a></li>
+    </ul>
+    <p class="admin-sidebar-title">System</p>
+    <ul class="admin-nav">
+      <li><a href="{{ url_for('index') }}"><i class="fa-solid fa-arrow-left"></i> Back to Site</a></li>
+    </ul>
+  </aside>
+  <main class="admin-content">
+    <h1 class="admin-page-title"><i class="fa-solid fa-seedling" style="color:var(--green-500)"></i> Manage Crops</h1>
+    <p class="admin-page-subtitle">Add, edit, or remove crops from the knowledge base.</p>
+
+    <!-- Add Crop Form -->
+    <div class="add-form-card">
+      <div class="form-title"><i class="fa-solid fa-plus-circle"></i> Add New Crop</div>
+      <form method="POST">
+        <input type="hidden" name="action" value="add">
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="crop-name">Crop Name *</label>
+            <input type="text" id="crop-name" name="name" class="form-control" placeholder="e.g. Sorghum" required>
+          </div>
+          <div class="form-group">
+            <label for="crop-icon">Font Awesome Icon</label>
+            <input type="text" id="crop-icon" name="icon" class="form-control" placeholder="fa-leaf" value="fa-seedling">
+          </div>
+          <div class="form-group" style="grid-column:1/-1">
+            <label for="crop-desc">Description</label>
+            <textarea id="crop-desc" name="description" class="form-control" placeholder="Short description of the crop..."></textarea>
+          </div>
+          <div class="form-group" style="align-self:end">
+            <button type="submit" class="btn btn-primary"><i class="fa-solid fa-plus"></i> Add Crop</button>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <!-- Crops Table -->
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr><th>#</th><th>Icon</th><th>Name</th><th>Description</th><th>Actions</th></tr>
+        </thead>
+        <tbody>
+          {% for crop in crops %}
+          <tr>
+            <td>{{ crop.id }}</td>
+            <td><i class="fa-solid {{ crop.icon }}" style="color:var(--green-400);font-size:1.1rem"></i></td>
+            <td><strong>{{ crop.name }}</strong></td>
+            <td style="max-width:350px">{{ crop.description }}</td>
+            <td>
+              <div class="td-actions">
+                <!-- Inline Edit Form (toggle) -->
+                <button class="btn btn-secondary btn-sm" onclick="toggleEdit('edit-{{ crop.id }}')">
+                  <i class="fa-solid fa-pen"></i> Edit
+                </button>
+                <form method="POST" onsubmit="return confirm('Delete crop and all its data?')">
+                  <input type="hidden" name="action" value="delete">
+                  <input type="hidden" name="crop_id" value="{{ crop.id }}">
+                  <button type="submit" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash"></i></button>
+                </form>
+              </div>
+              <!-- Edit Row -->
+              <div id="edit-{{ crop.id }}" style="display:none;margin-top:0.75rem">
+                <form method="POST">
+                  <input type="hidden" name="action" value="edit">
+                  <input type="hidden" name="crop_id" value="{{ crop.id }}">
+                  <div class="form-grid" style="grid-template-columns:1fr 1fr auto">
+                    <input class="form-control" name="name" value="{{ crop.name }}" required placeholder="Name">
+                    <input class="form-control" name="icon" value="{{ crop.icon }}" placeholder="Icon">
+                    <textarea class="form-control" name="description" placeholder="Description" style="grid-column:1/-1">{{ crop.description }}</textarea>
+                    <button type="submit" class="btn btn-primary btn-sm"><i class="fa-solid fa-save"></i> Save</button>
+                  </div>
+                </form>
+              </div>
+            </td>
+          </tr>
+          {% else %}
+          <tr><td colspan="5" class="text-center text-muted">No crops yet.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </main>
+</div>
+{% endblock %}
+{% block scripts %}
+<script>
+function toggleEdit(id) {
+  const el = document.getElementById(id);
+  el.style.display = el.style.display === 'none' ? 'block' : 'none';
+}
+</script>
+{% endblock %}

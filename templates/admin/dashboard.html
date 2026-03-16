@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% block title %}Admin Panel – AgroAid{% endblock %}
+{% block content %}
+<div class="admin-layout">
+  <!-- Sidebar -->
+  <aside class="admin-sidebar">
+    <p class="admin-sidebar-title">Knowledge Base</p>
+    <ul class="admin-nav">
+      <li><a href="{{ url_for('admin_dashboard') }}" class="{{ 'active' if request.endpoint == 'admin_dashboard' }}"><i class="fa-solid fa-gauge"></i> Dashboard</a></li>
+      <li><a href="{{ url_for('admin_crops') }}" class="{{ 'active' if request.endpoint == 'admin_crops' }}"><i class="fa-solid fa-seedling"></i> Crops</a></li>
+      <li><a href="{{ url_for('admin_symptoms') }}" class="{{ 'active' if request.endpoint == 'admin_symptoms' }}"><i class="fa-solid fa-list-check"></i> Symptoms</a></li>
+      <li><a href="{{ url_for('admin_diseases') }}" class="{{ 'active' if request.endpoint == 'admin_diseases' }}"><i class="fa-solid fa-viruses"></i> Diseases</a></li>
+      <li><a href="{{ url_for('admin_treatments') }}" class="{{ 'active' if request.endpoint == 'admin_treatments' }}"><i class="fa-solid fa-kit-medical"></i> Treatments</a></li>
+      <li><a href="{{ url_for('admin_rules') }}" class="{{ 'active' if request.endpoint == 'admin_rules' }}"><i class="fa-solid fa-code-branch"></i> Rules</a></li>
+    </ul>
+    <p class="admin-sidebar-title">System</p>
+    <ul class="admin-nav">
+      <li><a href="{{ url_for('index') }}"><i class="fa-solid fa-arrow-left"></i> Back to Site</a></li>
+    </ul>
+  </aside>
+
+  <!-- Content -->
+  <main class="admin-content">
+    <h1 class="admin-page-title"><i class="fa-solid fa-gauge" style="color:var(--green-500)"></i> Admin Dashboard</h1>
+    <p class="admin-page-subtitle">Overview of the AgroAid knowledge base.</p>
+
+    <div class="stats-grid" style="grid-template-columns:repeat(auto-fit,minmax(160px,1fr))">
+      <div class="stat-card">
+        <i class="fa-solid fa-seedling stat-icon"></i>
+        <div class="stat-value">{{ crops|length }}</div>
+        <div class="stat-label">Crops</div>
+      </div>
+      <div class="stat-card">
+        <i class="fa-solid fa-list-check stat-icon"></i>
+        <div class="stat-value">{{ symptoms|length }}</div>
+        <div class="stat-label">Symptoms</div>
+      </div>
+      <div class="stat-card">
+        <i class="fa-solid fa-viruses stat-icon"></i>
+        <div class="stat-value">{{ diseases|length }}</div>
+        <div class="stat-label">Diseases</div>
+      </div>
+      <div class="stat-card">
+        <i class="fa-solid fa-kit-medical stat-icon"></i>
+        <div class="stat-value">{{ treatments|length }}</div>
+        <div class="stat-label">Treatments</div>
+      </div>
+      <div class="stat-card">
+        <i class="fa-solid fa-code-branch stat-icon"></i>
+        <div class="stat-value">{{ rules|length }}</div>
+        <div class="stat-label">Rules</div>
+      </div>
+    </div>
+
+    <h2 style="font-family:'Outfit',sans-serif;font-size:1.1rem;font-weight:700;margin-bottom:1rem">Quick Links</h2>
+    <div style="display:flex;flex-wrap:wrap;gap:0.75rem">
+      {% for label, endpoint, icon in [
+        ('Manage Crops','admin_crops','fa-seedling'),
+        ('Manage Symptoms','admin_symptoms','fa-list-check'),
+        ('Manage Diseases','admin_diseases','fa-viruses'),
+        ('Manage Treatments','admin_treatments','fa-kit-medical'),
+        ('Manage Rules','admin_rules','fa-code-branch'),
+      ] %}
+      <a href="{{ url_for(endpoint) }}" class="btn btn-secondary">
+        <i class="fa-solid {{ icon }}"></i> {{ label }}
+      </a>
+      {% endfor %}
+    </div>
+  </main>
+</div>
+{% endblock %}

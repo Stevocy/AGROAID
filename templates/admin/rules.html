@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+{% block title %}Manage Rules – AgroAid Admin{% endblock %}
+{% block content %}
+<div class="admin-layout">
+  <aside class="admin-sidebar">
+    <p class="admin-sidebar-title">Knowledge Base</p>
+    <ul class="admin-nav">
+      <li><a href="{{ url_for('admin_dashboard') }}"><i class="fa-solid fa-gauge"></i> Dashboard</a></li>
+      <li><a href="{{ url_for('admin_crops') }}"><i class="fa-solid fa-seedling"></i> Crops</a></li>
+      <li><a href="{{ url_for('admin_symptoms') }}"><i class="fa-solid fa-list-check"></i> Symptoms</a></li>
+      <li><a href="{{ url_for('admin_diseases') }}"><i class="fa-solid fa-viruses"></i> Diseases</a></li>
+      <li><a href="{{ url_for('admin_treatments') }}"><i class="fa-solid fa-kit-medical"></i> Treatments</a></li>
+      <li><a href="{{ url_for('admin_rules') }}" class="active"><i class="fa-solid fa-code-branch"></i> Rules</a></li>
+    </ul>
+    <p class="admin-sidebar-title">System</p>
+    <ul class="admin-nav">
+      <li><a href="{{ url_for('index') }}"><i class="fa-solid fa-arrow-left"></i> Back to Site</a></li>
+    </ul>
+  </aside>
+  <main class="admin-content">
+    <h1 class="admin-page-title"><i class="fa-solid fa-code-branch" style="color:var(--green-500)"></i> Manage Rules</h1>
+    <p class="admin-page-subtitle">Define IF-THEN inference rules linking symptoms to diseases. Rules drive the forward-chaining engine.</p>
+
+    <!-- Add Rule Form -->
+    <div class="add-form-card">
+      <div class="form-title"><i class="fa-solid fa-plus-circle"></i> Add New Rule</div>
+      <form method="POST">
+        <input type="hidden" name="action" value="add">
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Disease *</label>
+            <select name="disease_id" id="admin-disease-select" class="form-control" required>
+              <option value="">Select Disease</option>
+              {% for d in diseases %}
+                <option value="{{ d.id }}">{{ d.crop_name }} – {{ d.name }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Confidence Score (0.0–1.0)</label>
+            <input type="number" name="confidence_score" class="form-control" value="0.9" min="0.1" max="1.0" step="0.05">
+          </div>
+        </div>
+        <div class="form-group mt-2">
+          <label>Symptom Conditions (IF) * — select all that must be present</label>
+          <div class="checkbox-group" id="admin-symptom-checkboxes">
+            <span style="color:var(--text-dim)">Select a disease first to load its crop's symptoms</span>
+          </div>
+        </div>
+        <div class="mt-2">
+          <button type="submit" class="btn btn-primary"><i class="fa-solid fa-plus"></i> Add Rule</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Rules Table -->
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr><th>#</th><th>Crop</th><th>Disease (THEN)</th><th>IF Symptoms</th><th>Confidence</th><th>Del.</th></tr>
+        </thead>
+        <tbody>
+          {% for rule in rules %}
+          <tr>
+            <td>{{ rule.id }}</td>
+            <td><span class="badge badge-low">{{ rule.crop_name }}</span></td>
+            <td><strong>{{ rule.disease_name }}</strong></td>
+            <td>
+              <div style="display:flex;flex-wrap:wrap;gap:0.3rem">
+                {% for sym in rule.symptom_names %}
+                  <span class="selected-symptom-tag" style="font-size:0.72rem">{{ sym }}</span>
+                {% else %}
+                  <span style="color:var(--text-dim);font-size:0.8rem">No conditions</span>
+                {% endfor %}
+              </div>
+            </td>
+            <td>
+              <span style="color:var(--green-400);font-weight:700">{{ (rule.confidence_score * 100)|int }}%</span>
+            </td>
+            <td>
+              <form method="POST" onsubmit="return confirm('Delete this rule?')" style="display:inline">
+                <input type="hidden" name="action" value="delete">
+                <input type="hidden" name="rule_id" value="{{ rule.id }}">
+                <button type="submit" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash"></i></button>
+              </form>
+            </td>
+          </tr>
+          {% else %}
+          <tr><td colspan="6" class="text-center text-muted">No rules yet.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </main>
+</div>
+{% endblock %}

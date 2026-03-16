@@ -1,0 +1,163 @@
+{% extends "base.html" %}
+
+{% block title %}Diagnosis Results – {{ crop.name }} | AgroAid{% endblock %}
+
+{% block content %}
+
+<div class="page-header container">
+  <div class="breadcrumb">
+    <a href="{{ url_for('index') }}"><i class="fa-solid fa-house"></i> Home</a>
+    <i class="fa-solid fa-chevron-right" style="font-size:0.65rem;color:var(--text-dim)"></i>
+    <a href="{{ url_for('diagnose_page', crop_id=crop.id) }}">{{ crop.name }}</a>
+    <i class="fa-solid fa-chevron-right" style="font-size:0.65rem;color:var(--text-dim)"></i>
+    <span>Results</span>
+  </div>
+
+  <div class="section-tag"><i class="fa-solid fa-microscope"></i> Step 3 of 3 — Diagnosis Complete</div>
+  <h1 class="page-title">
+    <i class="fa-solid {{ crop.icon }}" style="color:var(--green-500)"></i>
+    {{ crop.name }} Diagnosis Results
+  </h1>
+  <p style="color:var(--text-muted);font-size:0.9rem;margin-bottom:0.25rem">
+    Based on <strong style="color:var(--green-400)">{{ selected_symptoms|length }} symptom(s)</strong> selected | AgroAid Inference Engine v1.0
+  </p>
+</div>
+
+<div class="results-section container">
+  <div class="results-layout">
+
+    <!-- Main Diagnoses -->
+    <div>
+      {% if diagnoses %}
+        <p style="color:var(--text-muted);font-size:0.85rem;margin-bottom:1.25rem">
+          <i class="fa-solid fa-circle-info" style="color:var(--green-500)"></i>
+          Results are ranked by confidence score. Review treatments starting from the highest-ranked diagnosis.
+        </p>
+        <div class="diagnosis-list">
+          {% for d in diagnoses %}
+            <div class="diagnosis-card {{ 'top-result' if loop.first }}"
+                 style="animation-delay: {{ loop.index0 * 0.1 }}s">
+
+              <div class="diagnosis-header">
+                <div class="diagnosis-header-left">
+                  <div class="diagnosis-rank">{{ loop.index }}</div>
+                  <div>
+                    <div class="diagnosis-name">{{ d.disease_name }}</div>
+                    {% if loop.first %}
+                      <div style="font-size:0.75rem;color:var(--amber-400);font-weight:600;margin-top:2px">
+                        <i class="fa-solid fa-trophy"></i> Most Likely Match
+                      </div>
+                    {% endif %}
+                  </div>
+                </div>
+                <div class="diagnosis-header-right">
+                  <!-- Severity Badge -->
+                  {% set sev = d.severity | lower %}
+                  <span class="badge badge-{{ sev }}">
+                    <i class="fa-solid {{ 'fa-skull-crossbones' if sev == 'critical' else 'fa-triangle-exclamation' if sev == 'high' else 'fa-circle-exclamation' if sev == 'moderate' else 'fa-circle-check' }}"></i>
+                    {{ d.severity }}
+                  </span>
+                  <!-- Confidence Meter -->
+                  <div class="confidence-wrap">
+                    <div class="confidence-label">Confidence</div>
+                    <div class="confidence-bar-bg">
+                      <div class="confidence-bar-fill" data-width="{{ d.confidence }}" style="width:0%"></div>
+                    </div>
+                    <div class="confidence-value">{{ d.confidence }}%</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="diagnosis-body">
+                <p class="diagnosis-description">{{ d.description }}</p>
+
+                <div class="match-info">
+                  <i class="fa-solid fa-check-circle"></i>
+                  {{ d.matched }} of {{ d.total_required }} rule conditions matched from your selected symptoms
+                </div>
+
+                {% if d.treatments %}
+                  <div class="treatments-title">
+                    <i class="fa-solid fa-kit-medical"></i>
+                    Recommended Treatments &amp; Actions
+                  </div>
+                  <div class="treatment-list">
+                    {% for t in d.treatments %}
+                      <div class="treatment-item">
+                        <div class="treatment-priority">{{ t.priority }}</div>
+                        <div class="treatment-content">
+                          <div class="treatment-type type-{{ t.treatment_type | lower }}">
+                            <i class="fa-solid {{ 'fa-flask' if t.treatment_type == 'Chemical' else 'fa-recycle' if t.treatment_type == 'Cultural' else 'fa-shield' if t.treatment_type == 'Preventive' else 'fa-leaf' if t.treatment_type == 'Biological' else 'fa-triangle-exclamation' if t.treatment_type == 'Quarantine' else 'fa-pills' }}"></i>
+                            {{ t.treatment_type }}
+                          </div>
+                          <div class="treatment-desc">{{ t.description }}</div>
+                        </div>
+                      </div>
+                    {% endfor %}
+                  </div>
+                {% else %}
+                  <p style="color:var(--text-dim);font-size:0.85rem">No treatment data available for this disease.</p>
+                {% endif %}
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+
+      {% else %}
+        <div class="no-results">
+          <i class="fa-solid fa-magnifying-glass-minus"></i>
+          <h2 style="font-size:1.25rem;font-weight:700;margin-bottom:0.5rem">No Match Found</h2>
+          <p>The selected symptoms did not match any known disease rules in the knowledge base.</p>
+          <p style="margin-top:0.5rem;font-size:0.85rem">Try selecting more symptoms or different combinations.</p>
+          <div style="margin-top:1.5rem;display:flex;gap:1rem;justify-content:center;flex-wrap:wrap">
+            <a href="{{ url_for('diagnose_page', crop_id=crop.id) }}" class="btn btn-primary">
+              <i class="fa-solid fa-arrow-left"></i> Try Different Symptoms
+            </a>
+            <a href="{{ url_for('index') }}" class="btn btn-secondary">
+              <i class="fa-solid fa-house"></i> Back to Home
+            </a>
+          </div>
+        </div>
+      {% endif %}
+    </div>
+
+    <!-- Sidebar -->
+    <div class="results-sidebar">
+      <div class="sidebar-card">
+        <div class="sidebar-title"><i class="fa-solid fa-list-check"></i> Symptoms You Reported</div>
+        <div>
+          {% for s in selected_symptoms %}
+            <span class="selected-symptom-tag">
+              <i class="fa-solid fa-check" style="font-size:0.65rem"></i>
+              {{ s.name }}
+            </span>
+          {% endfor %}
+        </div>
+      </div>
+
+      <div class="sidebar-card">
+        <div class="sidebar-title"><i class="fa-solid fa-circle-info"></i> About AgroAid</div>
+        <p style="font-size:0.82rem;color:var(--text-muted);line-height:1.65">
+          AgroAid uses a <strong style="color:var(--green-400)">forward-chaining inference engine</strong> to match your observed symptoms against expert-encoded IF-THEN rules and rank possible diagnoses by confidence.
+        </p>
+        <hr class="divider">
+        <p style="font-size:0.78rem;color:var(--text-dim)">
+          <i class="fa-solid fa-triangle-exclamation" style="color:var(--amber-500)"></i>
+          This system provides advisory guidance only. Consult an agricultural extension officer for critical situations.
+        </p>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:0.75rem">
+        <a href="{{ url_for('diagnose_page', crop_id=crop.id) }}" class="btn btn-secondary btn-full">
+          <i class="fa-solid fa-rotate-left"></i> Re-select Symptoms
+        </a>
+        <a href="{{ url_for('index') }}" class="btn btn-secondary btn-full">
+          <i class="fa-solid fa-seedling"></i> Diagnose Another Crop
+        </a>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+
+{% block title %}AgroAid – Intelligent Crop Disease Diagnosis{% endblock %}
+
+{% block content %}
+
+<!-- Hero Section -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-badge">
+      <i class="fa-solid fa-microchip"></i>
+      AI-Powered Rule-Based Expert System
+    </div>
+    <h1 class="hero-title">
+      Diagnose Crop Diseases<br>
+      <span class="gradient-text">Instantly & Accurately</span>
+    </h1>
+    <p class="hero-subtitle">
+      Select your crop, describe the symptoms you observe — and AgroAid's intelligent inference engine will identify the disease and recommend proven treatments.
+    </p>
+    <a href="#select-crop" class="btn btn-primary btn-lg pulse-glow" style="margin-right:1rem">
+      <i class="fa-solid fa-magnifying-glass-plus"></i> Start Diagnosis
+    </a>
+    <a href="#how-it-works" class="btn btn-secondary btn-lg">
+      <i class="fa-solid fa-circle-info"></i> How it Works
+    </a>
+  </div>
+</section>
+
+<!-- Stats bar -->
+<div class="container" style="margin-bottom:2rem">
+  <div class="stats-grid">
+    <div class="stat-card">
+      <i class="fa-solid fa-wheat-awn stat-icon"></i>
+      <div class="stat-value">{{ crops|length }}</div>
+      <div class="stat-label">Crops Supported</div>
+    </div>
+    <div class="stat-card">
+      <i class="fa-solid fa-viruses stat-icon"></i>
+      <div class="stat-value">15</div>
+      <div class="stat-label">Diseases in KB</div>
+    </div>
+    <div class="stat-card">
+      <i class="fa-solid fa-list-check stat-icon"></i>
+      <div class="stat-value">50+</div>
+      <div class="stat-label">Symptoms Covered</div>
+    </div>
+    <div class="stat-card">
+      <i class="fa-solid fa-syringe stat-icon"></i>
+      <div class="stat-value">60+</div>
+      <div class="stat-label">Treatments Listed</div>
+    </div>
+  </div>
+</div>
+
+<!-- Crop Selection -->
+<section id="select-crop" class="container" style="padding-bottom:1.5rem">
+  <div class="section-tag"><i class="fa-solid fa-hand-pointer"></i> Step 1</div>
+  <h2 class="page-title" style="font-size:1.5rem;margin-bottom:0.4rem">Select Your Crop</h2>
+  <p style="color:var(--text-muted);font-size:0.9rem;margin-bottom:1.75rem">
+    Choose the crop you want to diagnose from the options below.
+  </p>
+
+  {% if crops %}
+    <div class="crops-grid">
+      {% for crop in crops %}
+        <a href="{{ url_for('diagnose_page', crop_id=crop.id) }}" class="crop-card">
+          <div class="crop-icon">
+            <i class="fa-solid {{ crop.icon }}"></i>
+          </div>
+          <div class="crop-name">{{ crop.name }}</div>
+          <div class="crop-desc">{{ crop.description[:75] }}{% if crop.description|length > 75 %}…{% endif %}</div>
+        </a>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="empty-state">
+      <i class="fa-solid fa-leaf"></i>
+      <p>No crops in the knowledge base yet.</p>
+      <a href="{{ url_for('admin_crops') }}" class="btn btn-primary mt-2">Add Crops in Admin</a>
+    </div>
+  {% endif %}
+</section>
+
+<!-- How it Works -->
+<section id="how-it-works" class="container" style="padding:4rem 2rem">
+  <div class="section-tag"><i class="fa-solid fa-gears"></i> How It Works</div>
+  <h2 class="page-title" style="font-size:1.5rem;margin-bottom:2rem">Three Simple Steps</h2>
+
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:1.5rem">
+    {% for step in [
+      ('1', 'fa-seedling', 'Select a Crop', 'Pick the crop that is showing disease symptoms from our database of supported crops.'),
+      ('2', 'fa-list-check', 'Describe Symptoms', 'Check all visible symptoms you have observed on the crop – leaves, stem, roots, or fruit.'),
+      ('3', 'fa-microscope', 'Get Diagnosis', 'Our forward-chaining inference engine matches your symptoms against expert-encoded rules and returns a ranked diagnosis with treatment steps.')
+    ] %}
+    <div class="card" style="padding:2rem">
+      <div style="display:flex;align-items:center;gap:1rem;margin-bottom:1rem">
+        <div style="width:48px;height:48px;background:linear-gradient(135deg,var(--green-800),var(--green-700));border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.4rem;color:var(--green-400)">
+          <i class="fa-solid {{ step[1] }}"></i>
+        </div>
+        <span style="font-family:'Outfit',sans-serif;font-size:0.8rem;font-weight:700;color:var(--green-500);text-transform:uppercase;letter-spacing:0.08em">Step {{ step[0] }}</span>
+      </div>
+      <h3 style="font-family:'Outfit',sans-serif;font-size:1.1rem;font-weight:700;margin-bottom:0.5rem">{{ step[2] }}</h3>
+      <p style="font-size:0.88rem;color:var(--text-muted);line-height:1.65">{{ step[3] }}</p>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+
+{% endblock %}

@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Login – AgroAid{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 450px; margin-top: 4rem; margin-bottom: 5rem;">
+  <div class="add-form-card" style="padding: 2.5rem; text-align: center;">
+    <div class="form-title" style="justify-content: center; font-size: 1.5rem; margin-bottom: 0.5rem;">
+      <i class="fa-solid fa-shield-halved" style="color:var(--green-500)"></i> Admin Login
+    </div>
+    <p style="color:var(--text-muted); font-size: 0.9rem; margin-bottom: 2rem;">
+      Access is restricted to authorized AgroAid administrators.
+    </p>
+
+    <form method="POST" style="text-align: left;">
+      <div class="form-group">
+        <label for="username">Username</label>
+        <div style="position: relative;">
+          <i class="fa-solid fa-user" style="position: absolute; left: 1rem; top: 1rem; color: var(--text-dim);"></i>
+          <input type="text" id="username" name="username" class="form-control" placeholder="Enter username" required style="padding-left: 2.5rem;">
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <div style="position: relative;">
+          <i class="fa-solid fa-lock" style="position: absolute; left: 1rem; top: 1rem; color: var(--text-dim);"></i>
+          <input type="password" id="password" name="password" class="form-control" placeholder="Enter password" required style="padding-left: 2.5rem;">
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary btn-full" style="margin-top: 1.5rem;">
+        <i class="fa-solid fa-right-to-bracket"></i> Login
+      </button>
+    </form>
+    
+    <div style="margin-top: 1.5rem;">
+      <a href="{{ url_for('index') }}" style="color: var(--green-400); text-decoration: none; font-size: 0.85rem;">
+        <i class="fa-solid fa-arrow-left"></i> Back to Home
+      </a>
+    </div>
+  </div>
+</div>
+{% endblock %}

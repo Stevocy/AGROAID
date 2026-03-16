@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block title %}{{ crop.name }} Symptoms – AgroAid{% endblock %}
+
+{% block content %}
+
+<div class="page-header container">
+  <div class="breadcrumb">
+    <a href="{{ url_for('index') }}"><i class="fa-solid fa-house"></i> Home</a>
+    <i class="fa-solid fa-chevron-right" style="font-size:0.65rem;color:var(--text-dim)"></i>
+    <span>Select Symptoms</span>
+  </div>
+
+  <div class="section-tag"><i class="fa-solid fa-hand-pointer"></i> Step 2 of 3</div>
+  <h1 class="page-title">
+    <i class="fa-solid {{ crop.icon }}" style="color:var(--green-500)"></i>
+    {{ crop.name }} — Observed Symptoms
+  </h1>
+  <p style="color:var(--text-muted);font-size:0.9rem;max-width:600px;margin-bottom:1.25rem">
+    {{ crop.description }}
+  </p>
+
+  <div class="symptom-counter">
+    <span>Symptoms selected:</span>
+    <div class="counter-badge" id="selected-count">0</div>
+    <span>— select at least one to proceed</span>
+  </div>
+
+  <div style="display:flex;gap:0.75rem;margin-bottom:0.5rem">
+    <button id="select-all-btn" class="btn btn-secondary btn-sm">
+      <i class="fa-solid fa-check-double"></i> Select All
+    </button>
+    <button id="clear-all-btn" class="btn btn-secondary btn-sm">
+      <i class="fa-solid fa-xmark"></i> Clear All
+    </button>
+  </div>
+</div>
+
+<form method="POST" action="{{ url_for('results') }}" class="symptoms-form container">
+  <input type="hidden" name="crop_id" value="{{ crop.id }}">
+
+  {% if symptoms %}
+    <div class="symptoms-grid">
+      {% for symptom in symptoms %}
+        <div class="symptom-item">
+          <input type="checkbox" id="sym_{{ symptom.id }}" name="symptoms" value="{{ symptom.id }}">
+          <label class="symptom-label" for="sym_{{ symptom.id }}">
+            <div class="symptom-check">
+              <i class="fa-solid fa-check" style="font-size:0.65rem;color:white;display:none" class="check-icon"></i>
+            </div>
+            <div class="symptom-text">
+              <strong>{{ symptom.name }}</strong>
+              <span>{{ symptom.description }}</span>
+            </div>
+          </label>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="empty-state" style="margin-bottom:2rem">
+      <i class="fa-solid fa-triangle-exclamation"></i>
+      <p>No symptoms found for {{ crop.name }}. Please add symptoms via the Admin Panel.</p>
+    </div>
+  {% endif %}
+
+  <div style="display:flex;gap:1rem;flex-wrap:wrap;align-items:center">
+    <button type="submit" class="btn btn-primary btn-lg" id="diagnose-btn" disabled>
+      <i class="fa-solid fa-magnifying-glass-chart"></i> Diagnose Now
+    </button>
+    <a href="{{ url_for('index') }}" class="btn btn-secondary">
+      <i class="fa-solid fa-arrow-left"></i> Change Crop
+    </a>
+  </div>
+</form>
+
+{% endblock %}

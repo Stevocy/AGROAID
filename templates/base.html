@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}AgroAid – Crop Disease Expert System{% endblock %}</title>
+  <meta name="description" content="{% block meta_desc %}AgroAid is an intelligent rule-based expert system for diagnosing crop diseases and providing evidence-based treatment recommendations.{% endblock %}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  {% block head_extra %}{% endblock %}
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="nav-inner">
+      <a href="{{ url_for('index') }}" class="nav-brand">
+        <div class="nav-logo-icon"><i class="fa-solid fa-seedling"></i></div>
+        <span class="nav-logo-text">AgroAid</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="{{ url_for('index') }}" class="{{ 'active' if request.endpoint == 'index' }}">
+          <i class="fa-solid fa-house"></i> Home
+        </a></li>
+        <li><a href="{{ url_for('index') }}#how-it-works">
+          <i class="fa-solid fa-circle-info"></i> How It Works
+        </a></li>
+        {% if session.get('logged_in') %}
+        <li><a href="{{ url_for('admin_dashboard') }}" class="nav-btn {{ 'active' if 'admin' in request.endpoint }}">
+          <i class="fa-solid fa-shield-halved"></i> Admin Panel
+        </a></li>
+        <li><a href="{{ url_for('logout') }}" class="nav-btn" style="background:var(--red-600);border-color:var(--red-500);color:white">
+          <i class="fa-solid fa-right-from-bracket"></i> Logout
+        </a></li>
+        {% else %}
+        <li><a href="{{ url_for('login') }}" class="nav-btn {{ 'active' if request.endpoint == 'login' }}">
+          <i class="fa-solid fa-right-to-bracket"></i> Admin Login
+        </a></li>
+        {% endif %}
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Flash Messages -->
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <div class="flash-container">
+        {% for category, msg in messages %}
+          <div class="flash {{ category }}">
+            <i class="fa-solid {{ 'fa-circle-check' if category == 'success' else 'fa-triangle-exclamation' if category == 'warning' else 'fa-circle-xmark' }}"></i>
+            {{ msg }}
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% endwith %}
+
+  <!-- Main Content -->
+  {% block content %}{% endblock %}
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>
+      © 2026 AgroAid · Maseno University · Dept. of Computer Science &nbsp;|&nbsp;
+      Built by Stephen Ochieng, Janet Otieno &amp; Charity Chepkoech
+    </p>
+  </footer>
+
+  <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+  {% block scripts %}{% endblock %}
+</body>
+</html>
