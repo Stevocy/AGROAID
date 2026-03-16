@@ -22,26 +22,47 @@
         <li><a href="{{ url_for('index') }}" class="{{ 'active' if request.endpoint == 'index' }}">
           <i class="fa-solid fa-house"></i> Home
         </a></li>
+        <li><a href="{{ url_for('about') }}" class="{{ 'active' if request.endpoint == 'about' }}">
+          <i class="fa-solid fa-users"></i> About Us
+        </a></li>
         <li><a href="{{ url_for('index') }}#how-it-works">
           <i class="fa-solid fa-circle-info"></i> How It Works
         </a></li>
+      </ul>
+      <button class="menu-toggle" id="menu-toggle" aria-label="Toggle Menu">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Global Sidebar -->
+  <div class="sidebar-overlay" id="sidebar-overlay"></div>
+  <aside class="global-sidebar" id="global-sidebar">
+    <div class="sidebar-header">
+      <div class="nav-brand">
+        <div class="nav-logo-icon"><i class="fa-solid fa-seedling"></i></div>
+        <span class="nav-logo-text" style="font-size:1.2rem">AgroAid</span>
+      </div>
+      <button id="close-sidebar" class="close-sidebar-btn"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="sidebar-content">
+      <p class="sidebar-title">Administration</p>
+      <ul class="sidebar-nav">
         {% if session.get('logged_in') %}
-        <li><a href="{{ url_for('admin_dashboard') }}" class="nav-btn {{ 'active' if 'admin' in request.endpoint }}">
+        <li><a href="{{ url_for('admin_dashboard') }}" class="{{ 'active' if 'admin' in request.endpoint }}">
           <i class="fa-solid fa-shield-halved"></i> Admin Panel
         </a></li>
-        <li><a href="{{ url_for('logout') }}" class="nav-btn" style="background:var(--red-600);border-color:var(--red-500);color:white">
+        <li><a href="{{ url_for('logout') }}" style="color:var(--red-400)">
           <i class="fa-solid fa-right-from-bracket"></i> Logout
         </a></li>
         {% else %}
-        <li><a href="{{ url_for('login') }}" class="nav-btn {{ 'active' if request.endpoint == 'login' }}">
+        <li><a href="{{ url_for('login') }}" class="{{ 'active' if request.endpoint == 'login' }}">
           <i class="fa-solid fa-right-to-bracket"></i> Admin Login
         </a></li>
         {% endif %}
       </ul>
     </div>
-  </nav>
-
-  <!-- Flash Messages -->
+  </aside>
   {% with messages = get_flashed_messages(with_categories=true) %}
     {% if messages %}
       <div class="flash-container">

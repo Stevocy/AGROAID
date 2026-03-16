@@ -22,6 +22,10 @@ def index():
     crops = db.get_all_crops()
     return render_template('index.html', crops=crops)
 
+@app.route('/about')
+def about():
+    return render_template('about.html')
+
 @app.route('/diagnose')
 def diagnose_page():
     crop_id = request.args.get('crop_id', type=int)

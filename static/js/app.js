@@ -91,6 +91,28 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 50);
   });
 
+  // ── Global Sidebar Toggle ────────────────────────────────────────
+  const menuToggle = document.getElementById('menu-toggle');
+  const globalSidebar = document.getElementById('global-sidebar');
+  const sidebarOverlay = document.getElementById('sidebar-overlay');
+  const closeSidebarBtn = document.getElementById('close-sidebar');
+
+  function openSidebar() {
+    if(globalSidebar) globalSidebar.classList.add('open');
+    if(sidebarOverlay) sidebarOverlay.classList.add('active');
+    document.body.style.overflow = 'hidden'; // Prevent scrolling
+  }
+
+  function closeSidebar() {
+    if(globalSidebar) globalSidebar.classList.remove('open');
+    if(sidebarOverlay) sidebarOverlay.classList.remove('active');
+    document.body.style.overflow = '';
+  }
+
+  if (menuToggle) menuToggle.addEventListener('click', openSidebar);
+  if (closeSidebarBtn) closeSidebarBtn.addEventListener('click', closeSidebar);
+  if (sidebarOverlay) sidebarOverlay.addEventListener('click', closeSidebar);
+
   // ── Select All / Clear All for symptoms ────────────────────────
   const selectAllBtn = document.getElementById('select-all-btn');
   const clearAllBtn  = document.getElementById('clear-all-btn');

@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block title %}About Us – AgroAid{% endblock %}
+
+{% block content %}
+<div class="page-header container">
+  <div class="breadcrumb">
+    <a href="{{ url_for('index') }}"><i class="fa-solid fa-house"></i> Home</a>
+    <i class="fa-solid fa-chevron-right" style="font-size:0.65rem;color:var(--text-dim)"></i>
+    <span>About Us</span>
+  </div>
+
+  <h1 class="page-title">
+    <i class="fa-solid fa-users" style="color:var(--green-500)"></i>
+    About the Team
+  </h1>
+  <p style="color:var(--text-muted);font-size:1rem;max-width:700px;margin-bottom:2rem;line-height:1.7;">
+    AgroAid was developed as a final year project by students at Maseno University, School of Computing and Informatics, Department of Computer Science. We are passionate about leveraging technology to solve real-world agricultural problems.
+  </p>
+</div>
+
+<div class="container" style="padding-bottom: 5rem;">
+  <div class="symptoms-grid" style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
+    
+    <!-- Team Member 1 -->
+    <div class="card" style="padding: 2.5rem; text-align: center;">
+      <div style="width: 80px; height: 80px; background: linear-gradient(135deg, var(--green-600), var(--green-400)); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2rem; color: white; margin: 0 auto 1.5rem; box-shadow: var(--shadow-btn);">
+        <i class="fa-solid fa-user-graduate"></i>
+      </div>
+      <h3 style="font-family: 'Outfit', sans-serif; font-size: 1.3rem; margin-bottom: 0.25rem;">Stephen Ochieng</h3>
+      <p style="color: var(--green-400); font-weight: 600; font-size: 0.85rem; margin-bottom: 1.5rem; letter-spacing: 0.05em;">REG. NO: CI/00174/014</p>
+      <p style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.6;">
+        <!-- Placeholder for Stephen to write about himself -->
+        [Stephen's Bio Placeholder: Add your personal description, role in the project, and career aspirations here.]
+      </p>
+    </div>
+
+    <!-- Team Member 2 -->
+    <div class="card" style="padding: 2.5rem; text-align: center;">
+      <div style="width: 80px; height: 80px; background: linear-gradient(135deg, var(--green-700), var(--green-500)); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2rem; color: white; margin: 0 auto 1.5rem; box-shadow: var(--shadow-btn);">
+        <i class="fa-solid fa-user-graduate"></i>
+      </div>
+      <h3 style="font-family: 'Outfit', sans-serif; font-size: 1.3rem; margin-bottom: 0.25rem;">Janet Otieno</h3>
+      <p style="color: var(--green-400); font-weight: 600; font-size: 0.85rem; margin-bottom: 1.5rem; letter-spacing: 0.05em;">REG. NO: CCS/00009/022</p>
+      <p style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.6;">
+        <!-- Placeholder for Janet to write about herself -->
+        [Janet's Bio Placeholder: Add your personal description, role in the project, and career aspirations here.]
+      </p>
+    </div>
+
+    <!-- Team Member 3 -->
+    <div class="card" style="padding: 2.5rem; text-align: center;">
+      <div style="width: 80px; height: 80px; background: linear-gradient(135deg, var(--green-800), var(--green-600)); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2rem; color: white; margin: 0 auto 1.5rem; box-shadow: var(--shadow-btn);">
+        <i class="fa-solid fa-user-graduate"></i>
+      </div>
+      <h3 style="font-family: 'Outfit', sans-serif; font-size: 1.3rem; margin-bottom: 0.25rem;">Charity Chepkoech</h3>
+      <p style="color: var(--green-400); font-weight: 600; font-size: 0.85rem; margin-bottom: 1.5rem; letter-spacing: 0.05em;">REG. NO: CCS/00077/022</p>
+      <p style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.6;">
+        <!-- Placeholder for Charity to write about herself -->
+        [Charity's Bio Placeholder: Add your personal description, role in the project, and career aspirations here.]
+      </p>
+    </div>
+
+  </div>
+</div>
+{% endblock %}
